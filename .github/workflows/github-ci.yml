@@ -1,4 +1,4 @@
-.name: Pipelines
+name: Pipelines
 
 on: 
   push:
