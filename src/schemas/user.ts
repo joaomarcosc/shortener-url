@@ -27,5 +27,17 @@ export const userCreateSchema = z
     }
   });
 
+export const userAuthenticateSchema = z.object({
+  email: z
+    .string({
+      required_error: "email is required",
+    })
+    .email("invalid email format"),
+  password: z.string({
+    required_error: "password is required",
+  }),
+});
+
 // CREATE
 export type CreateUserInput = z.infer<typeof userCreateSchema>;
+export type AuthenticateUserInput = z.infer<typeof userAuthenticateSchema>;

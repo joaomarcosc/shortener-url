@@ -5,6 +5,7 @@ import fastifySwaggerUi from "@fastify/swagger-ui";
 import fastify from "fastify";
 import { env } from "./env";
 import { appRoutes } from "./http/routes";
+import jwtPlugin from "./plugins/jwt-authenticate";
 
 const app = fastify({
   logger: env.NODE_ENV === "development",
@@ -12,6 +13,7 @@ const app = fastify({
 
 app.register(fastifyFormbody);
 app.register(fastifyMultipart);
+app.register(jwtPlugin);
 
 app.register(fastifySwagger, {
   swagger: {
