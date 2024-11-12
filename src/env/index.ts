@@ -1,14 +1,6 @@
-import { config } from "dotenv";
+import "dotenv";
 
 import z from "zod";
-
-if (process.env.NODE_ENV === "test") {
-  config({ path: ".env.test" });
-}
-
-if (process.env.NODE_ENV !== "test") {
-  config();
-}
 
 const databaseSchema = {
   DATABASE_URL: z.string().min(1, { message: "DATABASE_URL is required" }),
