@@ -29,6 +29,7 @@ jobs:
       - name: Test
         env:
           SECRET_KEY: ${{secrets.SECRET_KEY}}
+          DATABASE_URL: ${{variables.DATABASE_URL}}
         run: npm run test
 
       - name: Build
