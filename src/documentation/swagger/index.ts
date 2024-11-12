@@ -1,9 +1,10 @@
 import { getShortedUrlSchema, urlCreateSchema } from "@/schemas/url";
-import { userCreateSchema } from "@/schemas/user";
+import { userAuthenticateSchema, userCreateSchema } from "@/schemas/user";
 import zodToJsonSchema from "zod-to-json-schema";
 
 export const swaggerTagsGroups = {
   url: ["url"],
+  user: ["user"],
 };
 
 /* **************************
@@ -26,5 +27,10 @@ export const urlGetJsonSchema = {
 /* ----------------  USER --------------- */
 export const userCreateJsonSchema = {
   body: zodToJsonSchema(userCreateSchema),
-  tags: swaggerTagsGroups.url,
+  tags: swaggerTagsGroups.user,
+};
+
+export const userAuthenticateJsonSchema = {
+  body: zodToJsonSchema(userAuthenticateSchema),
+  tags: swaggerTagsGroups.user,
 };
