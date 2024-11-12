@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
+import type { Url } from "@/infra/db/types/db";
 import type { Selectable } from "kysely";
-import type { Url } from "kysely-codegen";
 import type { CreateUrlParams, FindOneUrlParams, UrlRepository } from "../url-repository";
 
 export class UrlRepositoryInMemory implements UrlRepository {

@@ -1,12 +1,12 @@
 import { defineConfig } from "kysely-ctl";
-import { db } from "./src/database";
+import { db } from "./src/infra/db/database";
 
 export default defineConfig({
   kysely: db,
   migrations: {
-    migrationFolder: "db/migrations",
+    migrationFolder: "/src/infra/db/migrations",
   },
   seeds: {
-    seedFolder: "db/seeds",
+    seedFolder: "/src/infra/db/seeds",
   },
 });

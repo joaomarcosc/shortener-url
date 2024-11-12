@@ -1,5 +1,5 @@
 import { type Kysely, sql } from "kysely";
-import type { DB } from "kysely-codegen";
+import type { DB } from "../types/db";
 
 export async function up(db: Kysely<DB>): Promise<void> {
   await db.schema

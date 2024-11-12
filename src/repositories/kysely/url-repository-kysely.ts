@@ -1,6 +1,6 @@
-import { db } from "@/database";
+import { db } from "@/infra/db/database";
+import type { Url } from "@/infra/db/types/db";
 import type { Selectable } from "kysely";
-import type { Url } from "kysely-codegen";
 import type { CreateUrlParams, FindOneUrlParams, UrlRepository } from "../url-repository";
 
 export class UrlRepositoryKysely implements UrlRepository {

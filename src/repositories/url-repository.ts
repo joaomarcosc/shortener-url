@@ -1,5 +1,5 @@
+import type { Url } from "@/infra/db/types/db";
 import type { Selectable } from "kysely";
-import type { Url } from "kysely-codegen";
 
 export interface FindOneUrlParams {
   origUrl?: string;
