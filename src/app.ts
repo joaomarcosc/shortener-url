@@ -29,9 +29,7 @@ app.register(fastifySwaggerUi, {
   routePrefix: "/documentation",
 });
 
-app.register(appRoutes, {
-  prefix: "/api/v1",
-});
+app.register(appRoutes);
 
 app.setErrorHandler((error, _, reply) => {
   if (env.NODE_ENV !== "production") {

@@ -3,10 +3,8 @@ import { urlRoutes } from "./controller/url.routes";
 import { userRoutes } from "./controller/user.routes";
 
 export async function appRoutes(app: FastifyInstance) {
-  app.register(urlRoutes, {
-    prefix: "/short-url/",
-  });
+  app.register(urlRoutes);
   app.register(userRoutes, {
-    prefix: "/user/",
+    prefix: "/auth/",
   });
 }

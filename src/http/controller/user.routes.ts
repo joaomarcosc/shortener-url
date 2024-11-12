@@ -5,6 +5,6 @@ import { UserController } from "./user";
 export async function userRoutes(app: FastifyInstance) {
   const userController = new UserController();
 
-  app.post("create", { schema: userCreateJsonSchema }, userController.create);
-  app.post("auth", { schema: userAuthenticateJsonSchema }, userController.authenticate);
+  app.post("register", { schema: userCreateJsonSchema }, userController.create);
+  app.post("login", { schema: userAuthenticateJsonSchema }, userController.authenticate);
 }
