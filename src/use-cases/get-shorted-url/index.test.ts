@@ -1,6 +1,6 @@
+import type { Url } from "@/infra/db/types/db";
 import { UrlRepositoryInMemory } from "@/repositories/in-memory/url-repository-in-memory";
 import type { Selectable } from "kysely";
-import type { Url } from "kysely-codegen";
 import { beforeEach, describe, expect, it } from "vitest";
 import { GetShortedUrlUseCase } from ".";
 import { ResourceNotFoundError } from "../errors/resource-not-found";
