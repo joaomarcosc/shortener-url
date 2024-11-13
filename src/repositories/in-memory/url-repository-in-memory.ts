@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { Url } from "@/infra/db/types/db";
 import type { Selectable } from "kysely";
-import type { CreateUrlParams, FindOneUrlParams, UrlRepository } from "../url-repository";
+import type { CreateUrlParams, FindOneUrlParams, SearchManyParams, UrlRepository } from "../url-repository";
 
 export class UrlRepositoryInMemory implements UrlRepository {
   url: Array<Selectable<Url>> = [];
@@ -32,5 +32,13 @@ export class UrlRepositoryInMemory implements UrlRepository {
       urlToUpdate.clicks = (urlToUpdate.clicks || 0) + incClick;
       urlToUpdate.updatedAt = new Date();
     }
+  }
+
+  async searchMany(data: SearchManyParams): Promise<Array<Selectable<Url>> | undefined> {
+    const urls = this.url
+      .filter((it) => it.userId === data.userId && it.origUrl.toLowerCase().includes(data.query ?? ""))
+      .slice((data.page - 1) * data.perPage, data.page * data.perPage);
+
+    return urls;
   }
 }

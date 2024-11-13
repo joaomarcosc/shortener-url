@@ -1,7 +1,8 @@
-import type { CreateUrlInput, GetShortedUrlInput } from "@/schemas/url";
+import { type CreateUrlInput, type GetShortedUrlInput, searchManyUrlSchema } from "@/schemas/url";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found";
 import { ShortWrongUrlError } from "@/use-cases/errors/short-wrong-url-error";
 import { makeGetShortedUrlFactory } from "@/use-cases/factories/make-get-shorted-url-factory";
+import { makeSearchManyUrlFactory } from "@/use-cases/factories/make-search-many-url-factory";
 import { makeShortenerUrlFactory } from "@/use-cases/factories/make-shortener-url-factory";
 import type { FastifyReply, FastifyRequest } from "fastify";
 
@@ -59,6 +60,29 @@ export class UrlController {
       const url = await makeShortenerUrl.execute(params);
 
       reply.redirect(url.origUrl);
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        return reply.status(error.statusCode).send({
+          message: error.message,
+        });
+      }
+
+      throw error;
+    }
+  }
+
+  async list(req: FastifyRequest, reply: FastifyReply) {
+    const query = searchManyUrlSchema.parse(req.query);
+    const userId = req.user?.sub ?? "";
+
+    try {
+      const makeSearchManyUrl = makeSearchManyUrlFactory();
+
+      const urls = await makeSearchManyUrl.execute({ ...query, userId });
+
+      return reply.status(200).send({
+        urls,
+      });
     } catch (error) {
       if (error instanceof ResourceNotFoundError) {
         return reply.status(error.statusCode).send({

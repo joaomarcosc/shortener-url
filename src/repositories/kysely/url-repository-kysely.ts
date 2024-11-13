@@ -1,7 +1,7 @@
 import { db } from "@/infra/db/database";
 import type { Url } from "@/infra/db/types/db";
 import type { Selectable } from "kysely";
-import type { CreateUrlParams, FindOneUrlParams, UrlRepository } from "../url-repository";
+import type { CreateUrlParams, FindOneUrlParams, SearchManyParams, UrlRepository } from "../url-repository";
 
 export class UrlRepositoryKysely implements UrlRepository {
   async findOne(data: FindOneUrlParams): Promise<Selectable<Url> | undefined> {
@@ -27,5 +27,23 @@ export class UrlRepositoryKysely implements UrlRepository {
       })
       .where("url.urlId", "=", urlId)
       .execute();
+  }
+
+  async searchMany(data: SearchManyParams): Promise<Array<Selectable<Url>> | undefined> {
+    let query = db
+      .selectFrom("url")
+      .selectAll()
+      .where("userId", "=", data.userId)
+      .orderBy("clicks", data.order)
+      .limit(data.perPage)
+      .offset((data.page - 1) * data.perPage);
+
+    if (data.query) {
+      query = query.where("origUrl", "like", `%${data.query}%`);
+    }
+
+    const urls = await query.execute();
+
+    return urls;
   }
 }
