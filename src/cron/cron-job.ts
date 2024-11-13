@@ -4,7 +4,7 @@ import cron from "node-cron";
 
 export function runCronJobs() {
   // Soft Delete Links without register user after 24h active
-  cron.schedule("0 * * * * *", async () => {
+  cron.schedule("0 */1 * * *", async () => {
     const deletedAt = new Date();
 
     try {
