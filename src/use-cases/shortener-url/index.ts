@@ -1,4 +1,3 @@
-import { env } from "@/env";
 import type { UrlRepository } from "@/repositories/url-repository";
 import type { UserRepository } from "@/repositories/user-repository";
 import { validateUrl } from "@/utils/validate-url";
@@ -18,7 +17,6 @@ export class ShortenerUrlUseCase {
   ) {}
 
   async execute({ origUrl, userId }: ShortenerUrlUseCaseParams) {
-    const base = env.BASE_URL;
     const urlId = nanoid(6);
 
     if (userId) {
@@ -39,7 +37,7 @@ export class ShortenerUrlUseCase {
       return url;
     }
 
-    const shortUrl = `${base}/${urlId}`;
+    const shortUrl = `/${urlId}`;
 
     url = await this.urlRepository.create({
       origUrl,
