@@ -4,15 +4,15 @@ import { UserRepositoryInMemory } from "@/repositories/in-memory/user-repository
 import type { UserRepository } from "@/repositories/user-repository";
 import bcrypt from "bcrypt";
 import type { Selectable } from "kysely";
-import { beforeEach, describe, expect, it } from "vitest";
-import { UpdateUrlUseCase } from ".";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { DeleteUrlUseCase } from ".";
 import { ShortenerUrlUseCase } from "../shortener-url";
 
-describe("UpdateUrl use case", () => {
+describe("DeleteUrl use case", () => {
   let urlRepository: UrlRepositoryInMemory;
   let userRepository: UserRepository;
   let shortenerUrlUseCase: ShortenerUrlUseCase;
-  let sut: UpdateUrlUseCase;
+  let sut: DeleteUrlUseCase;
   let url: Selectable<Url> | undefined;
   let user: Selectable<User> | undefined;
 
@@ -22,7 +22,7 @@ describe("UpdateUrl use case", () => {
     urlRepository = new UrlRepositoryInMemory();
     userRepository = new UserRepositoryInMemory();
     shortenerUrlUseCase = new ShortenerUrlUseCase(urlRepository, userRepository);
-    sut = new UpdateUrlUseCase(urlRepository, userRepository);
+    sut = new DeleteUrlUseCase(urlRepository, userRepository);
 
     user = await userRepository.create({
       email: "teste@teste.com",
@@ -34,16 +34,21 @@ describe("UpdateUrl use case", () => {
       origUrl,
       userId: user?.id ?? "",
     });
+
+    vi.useFakeTimers();
   });
 
-  it("should be can UPDATE origUrl", async () => {
-    const updatedUrl = "youtube.com.br";
+  it("deletedAt return NULL by default", async () => {
+    expect(url?.deletedAt).toBeNull();
+  });
+
+  it("Should be can set deletedAt", async () => {
+    const date = new Date();
     await sut.execute({
-      origUrl: updatedUrl,
       urlId: url?.urlId ?? "",
       userId: user?.id ?? "",
     });
 
-    expect(url?.origUrl).toEqual(updatedUrl);
+    expect(url?.deletedAt).toEqual(date);
   });
 });

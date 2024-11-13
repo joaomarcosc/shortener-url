@@ -35,6 +35,12 @@ export const updateUrlQuerySchema = z.object({
   }),
 });
 
+export const deleteUrlSchema = z.object({
+  urlId: z.string({
+    required_error: "urlId is required",
+  }),
+});
+
 // CREATE
 export type CreateUrlInput = z.infer<typeof urlCreateSchema>;
 
@@ -45,5 +51,8 @@ export type GetShortedUrlInput = z.infer<typeof getShortedUrlSchema>;
 export type SearchManyUrlsInput = z.infer<typeof searchManyUrlSchema>;
 
 // Update
-export type updateUrlBodyInput = z.infer<typeof updateUrlBodySchema>;
-export type updateUrlQueryInput = z.infer<typeof updateUrlQuerySchema>;
+export type UpdateUrlBodyInput = z.infer<typeof updateUrlBodySchema>;
+export type UpdateUrlQueryInput = z.infer<typeof updateUrlQuerySchema>;
+
+// Delete
+export type DeleteUrlInput = z.infer<typeof deleteUrlSchema>;

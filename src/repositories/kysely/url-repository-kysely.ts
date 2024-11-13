@@ -14,6 +14,7 @@ export class UrlRepositoryKysely implements UrlRepository {
     const url = await db
       .selectFrom("url")
       .where((eb) => eb("url.urlId", "=", data.urlId ?? "").or("url.origUrl", "=", data.origUrl ?? ""))
+      .where("deletedAt", "is", null)
       .selectAll()
       .executeTakeFirst();
 
@@ -26,7 +27,7 @@ export class UrlRepositoryKysely implements UrlRepository {
   }
 
   async updateOne(data: UpdateOneParams): Promise<void> {
-    let query = db.updateTable("url").where("url.urlId", "=", data.urlId);
+    let query = db.updateTable("url").where("url.urlId", "=", data.urlId).where("deletedAt", "is", null);
 
     if (data.userId) {
       query = query.where("url.userId", "=", data.userId);
@@ -44,6 +45,12 @@ export class UrlRepositoryKysely implements UrlRepository {
       });
     }
 
+    if (data.deletedAt) {
+      query = query.set({
+        deletedAt: data.deletedAt,
+      });
+    }
+
     await query.execute();
   }
 
@@ -52,6 +59,7 @@ export class UrlRepositoryKysely implements UrlRepository {
       .selectFrom("url")
       .selectAll()
       .where("userId", "=", data.userId)
+      .where("deletedAt", "is", null)
       .orderBy("clicks", data.order)
       .limit(data.perPage)
       .offset((data.page - 1) * data.perPage);

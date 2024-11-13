@@ -1,4 +1,5 @@
 import {
+  deleteUrlSchema,
   getShortedUrlSchema,
   searchManyUrlSchema,
   updateUrlBodySchema,
@@ -38,6 +39,11 @@ export const urlSearchManyJsonSchema = {
 export const urlUpdateJsonSchema = {
   body: zodToJsonSchema(updateUrlBodySchema),
   querystring: zodToJsonSchema(updateUrlQuerySchema),
+  tags: swaggerTagsGroups.url,
+};
+
+export const urlDeleteJsonSchema = {
+  params: zodToJsonSchema(deleteUrlSchema),
   tags: swaggerTagsGroups.url,
 };
 

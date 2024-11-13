@@ -1,12 +1,14 @@
 import {
   type CreateUrlInput,
   type GetShortedUrlInput,
+  deleteUrlSchema,
   searchManyUrlSchema,
   updateUrlBodySchema,
   updateUrlQuerySchema,
 } from "@/schemas/url";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found";
 import { ShortWrongUrlError } from "@/use-cases/errors/short-wrong-url-error";
+import { makeDeleteUrlFactory } from "@/use-cases/factories/make-delete-url-factory";
 import { makeGetShortedUrlFactory } from "@/use-cases/factories/make-get-shorted-url-factory";
 import { makeSearchManyUrlFactory } from "@/use-cases/factories/make-search-many-url-factory";
 import { makeShortenerUrlFactory } from "@/use-cases/factories/make-shortener-url-factory";
@@ -113,6 +115,30 @@ export class UrlController {
       await makeUpdateUrl.execute({
         origUrl: body.origUrl,
         urlId: query.urlId,
+        userId,
+      });
+
+      return reply.status(HTTP_STATUS_CODE.NoContent).send();
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        return reply.status(error.statusCode).send({
+          message: error.message,
+        });
+      }
+
+      throw error;
+    }
+  }
+
+  async delete(req: FastifyRequest, reply: FastifyReply) {
+    try {
+      const userId = req.user?.sub ?? "";
+      const params = deleteUrlSchema.parse(req.params);
+
+      const makeDeleteUrl = makeDeleteUrlFactory();
+
+      await makeDeleteUrl.execute({
+        urlId: params.urlId,
         userId,
       });
 
