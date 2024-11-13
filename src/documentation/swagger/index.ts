@@ -1,4 +1,4 @@
-import { getShortedUrlSchema, urlCreateSchema } from "@/schemas/url";
+import { getShortedUrlSchema, searchManyUrlSchema, urlCreateSchema } from "@/schemas/url";
 import { userAuthenticateSchema, userCreateSchema } from "@/schemas/user";
 import zodToJsonSchema from "zod-to-json-schema";
 
@@ -21,6 +21,11 @@ export const urlCreateJsonSchema = {
 
 export const urlGetJsonSchema = {
   params: zodToJsonSchema(getShortedUrlSchema),
+  tags: swaggerTagsGroups.url,
+};
+
+export const urlSearchManyJsonSchema = {
+  querystring: zodToJsonSchema(searchManyUrlSchema),
   tags: swaggerTagsGroups.url,
 };
 
