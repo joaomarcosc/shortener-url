@@ -6,7 +6,7 @@ export interface FindOneUrlParams {
   urlId?: string;
 }
 
-export interface CreateUrlParams extends Omit<Selectable<Url>, "createdAt" | "updatedAt" | "id"> {}
+export interface CreateUrlParams extends Omit<Selectable<Url>, "createdAt" | "updatedAt" | "id" | "deletedAt"> {}
 
 export interface SearchManyParams {
   query?: string;
@@ -21,6 +21,7 @@ export interface UpdateOneParams {
   userId?: string;
   origUrl?: string;
   incClick?: number;
+  deletedAt?: Date;
 }
 
 export interface UrlRepository {

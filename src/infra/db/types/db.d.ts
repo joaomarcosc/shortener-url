@@ -14,6 +14,7 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 export interface Url {
   clicks: Generated<number>;
   createdAt: Generated<Timestamp>;
+  deletedAt: Timestamp | null;
   id: Generated<string>;
   origUrl: string;
   shortUrl: string;

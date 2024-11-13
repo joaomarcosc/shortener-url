@@ -1,5 +1,6 @@
 import {
   urlCreateJsonSchema,
+  urlDeleteJsonSchema,
   urlGetJsonSchema,
   urlSearchManyJsonSchema,
   urlUpdateJsonSchema,
@@ -17,4 +18,5 @@ export async function urlRoutes(app: FastifyInstance) {
   // private routes
   app.get("/", { schema: urlSearchManyJsonSchema, onRequest: [app.authenticate] }, urlController.list);
   app.patch("/", { schema: urlUpdateJsonSchema, onRequest: [app.authenticate] }, urlController.update);
+  app.delete("/:urlId", { schema: urlDeleteJsonSchema, onRequest: [app.authenticate] }, urlController.delete);
 }

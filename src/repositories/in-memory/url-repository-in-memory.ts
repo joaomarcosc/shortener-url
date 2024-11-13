@@ -21,6 +21,7 @@ export class UrlRepositoryInMemory implements UrlRepository {
   async create(data: CreateUrlParams): Promise<Selectable<Url> | undefined> {
     const createdUrl: Selectable<Url> = {
       ...data,
+      deletedAt: null,
       createdAt: new Date(),
       updatedAt: new Date(),
       id: randomUUID(),
@@ -47,6 +48,10 @@ export class UrlRepositoryInMemory implements UrlRepository {
 
       if (data.origUrl) {
         urlToUpdate.origUrl = data.origUrl;
+      }
+
+      if (data.deletedAt) {
+        urlToUpdate.deletedAt = data.deletedAt;
       }
 
       urlToUpdate.updatedAt = new Date();
