@@ -1,9 +1,9 @@
 import { CamelCasePlugin, Kysely, PostgresDialect } from "kysely";
-import { Pool } from "pg";
+import pg from "pg";
 import { env } from "../../env";
 import type { DB } from "./types/db";
 
-const pool = new Pool({
+const pool = new pg.Pool({
   connectionString: env.DATABASE_URL,
 });
 
