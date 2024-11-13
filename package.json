@@ -1,12 +1,12 @@
 {
   "name": "shortener_url",
   "version": "1.0.0",
-  "type": "module",
   "description": "",
-  "main": "index.cjs",
+  "main": "index.js",
+  "node": "22",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "start": "node build/index.cjs",
+    "start": "node build/index.js",
     "build": "tsup src --out-dir build",
     "kysely": "kysely",
     "kysely:codegen": "kysely-codegen --out-file src/infra/db/types/db.d.ts --dialect postgres --camel-case",
