@@ -14,10 +14,22 @@ export class UrlController {
   ) {
     const body = req.body;
 
+    if (req.headers.authorization) {
+      try {
+        await req.jwtVerify();
+      } catch (_) {
+        reply.status(401).send({
+          message: "Unauthorized",
+        });
+      }
+    }
+
     try {
       const makeShortenerUrl = makeShortenerUrlFactory();
 
-      const url = await makeShortenerUrl.execute(body);
+      const user = req.user?.sub;
+
+      const url = await makeShortenerUrl.execute({ origUrl: body.origUrl, userId: user ?? null });
 
       reply.status(201).send({
         url: url?.shortUrl,

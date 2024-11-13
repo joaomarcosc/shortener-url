@@ -1,19 +1,33 @@
 import { env } from "@/env";
 import type { UrlRepository } from "@/repositories/url-repository";
+import type { UserRepository } from "@/repositories/user-repository";
 import { validateUrl } from "@/utils/validate-url";
 import { nanoid } from "nanoid";
+import { ResourceNotFoundError } from "../errors/resource-not-found";
 import { ShortWrongUrlError } from "../errors/short-wrong-url-error";
 
 interface ShortenerUrlUseCaseParams {
   origUrl: string;
+  userId: string | null;
 }
 
 export class ShortenerUrlUseCase {
-  constructor(private urlRepository: UrlRepository) {}
+  constructor(
+    private urlRepository: UrlRepository,
+    private userRepository: UserRepository,
+  ) {}
 
-  async execute({ origUrl }: ShortenerUrlUseCaseParams) {
+  async execute({ origUrl, userId }: ShortenerUrlUseCaseParams) {
     const base = env.BASE_URL;
     const urlId = nanoid(6);
+
+    if (userId) {
+      const user = await this.userRepository.findOne({ id: userId });
+
+      if (!user) {
+        throw new ResourceNotFoundError("User");
+      }
+    }
 
     if (!validateUrl(origUrl)) {
       throw new ShortWrongUrlError();
@@ -24,6 +38,7 @@ export class ShortenerUrlUseCase {
     if (url) {
       return url;
     }
+
     const shortUrl = `${base}/${urlId}`;
 
     url = await this.urlRepository.create({
@@ -31,6 +46,7 @@ export class ShortenerUrlUseCase {
       shortUrl,
       urlId,
       clicks: 0,
+      userId,
     });
 
     return url;

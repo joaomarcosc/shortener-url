@@ -1,5 +1,7 @@
 import type { Url } from "@/infra/db/types/db";
 import { UrlRepositoryInMemory } from "@/repositories/in-memory/url-repository-in-memory";
+import { UserRepositoryInMemory } from "@/repositories/in-memory/user-repository-in-memory";
+import type { UserRepository } from "@/repositories/user-repository";
 import type { Selectable } from "kysely";
 import { beforeEach, describe, expect, it } from "vitest";
 import { GetShortedUrlUseCase } from ".";
@@ -9,6 +11,7 @@ import { ShortenerUrlUseCase } from "../shortener-url";
 describe("Get shorted url use case", () => {
   let urlRepository: UrlRepositoryInMemory;
   let shortenerUrlUseCase: ShortenerUrlUseCase;
+  let userRepository: UserRepository;
   let sut: GetShortedUrlUseCase;
   let url: Selectable<Url> | undefined;
 
@@ -16,11 +19,13 @@ describe("Get shorted url use case", () => {
 
   beforeEach(async () => {
     urlRepository = new UrlRepositoryInMemory();
-    shortenerUrlUseCase = new ShortenerUrlUseCase(urlRepository);
+    userRepository = new UserRepositoryInMemory();
+    shortenerUrlUseCase = new ShortenerUrlUseCase(urlRepository, userRepository);
     sut = new GetShortedUrlUseCase(urlRepository);
 
     url = await shortenerUrlUseCase.execute({
       origUrl,
+      userId: null,
     });
   });
 
