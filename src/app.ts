@@ -3,6 +3,7 @@ import fastifyMultipart from "@fastify/multipart";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 import fastify from "fastify";
+import { runCronJobs } from "./cron/cron-job";
 import { env } from "./env";
 import { appRoutes } from "./http/routes";
 import jwtPlugin from "./plugins/jwt-authenticate";
@@ -38,6 +39,7 @@ app.register(fastifySwaggerUi, {
 });
 
 app.register(appRoutes);
+runCronJobs();
 
 app.setErrorHandler((error, _, reply) => {
   if (env.NODE_ENV !== "production") {
