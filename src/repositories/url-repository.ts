@@ -16,9 +16,16 @@ export interface SearchManyParams {
   order: "asc" | "desc";
 }
 
+export interface UpdateOneParams {
+  urlId: string;
+  userId?: string;
+  origUrl?: string;
+  incClick?: number;
+}
+
 export interface UrlRepository {
   create(data: CreateUrlParams): Promise<Selectable<Url> | undefined>;
   findOne(data: FindOneUrlParams): Promise<Selectable<Url> | undefined>;
-  updateOne(urlId: string, incClick: number): Promise<void>;
+  updateOne(data: UpdateOneParams): Promise<void>;
   searchMany(data: SearchManyParams): Promise<Array<Selectable<Url>> | undefined>;
 }

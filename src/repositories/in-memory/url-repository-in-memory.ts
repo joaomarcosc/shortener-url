@@ -1,7 +1,13 @@
 import { randomUUID } from "node:crypto";
 import type { Url } from "@/infra/db/types/db";
 import type { Selectable } from "kysely";
-import type { CreateUrlParams, FindOneUrlParams, SearchManyParams, UrlRepository } from "../url-repository";
+import type {
+  CreateUrlParams,
+  FindOneUrlParams,
+  SearchManyParams,
+  UpdateOneParams,
+  UrlRepository,
+} from "../url-repository";
 
 export class UrlRepositoryInMemory implements UrlRepository {
   url: Array<Selectable<Url>> = [];
@@ -25,11 +31,24 @@ export class UrlRepositoryInMemory implements UrlRepository {
     return createdUrl;
   }
 
-  async updateOne(urlId: string, incClick: number): Promise<void> {
-    const urlToUpdate = this.url.find((it) => it.id === urlId);
+  async updateOne(data: UpdateOneParams): Promise<void> {
+    const urlToUpdate = this.url.find((it) => {
+      if (data.userId) {
+        return it.urlId === data.urlId && it.userId === data.userId;
+      }
+
+      return it.id === data.urlId;
+    });
 
     if (urlToUpdate) {
-      urlToUpdate.clicks = (urlToUpdate.clicks || 0) + incClick;
+      if (data.incClick) {
+        urlToUpdate.clicks = (urlToUpdate.clicks || 0) + data.incClick;
+      }
+
+      if (data.origUrl) {
+        urlToUpdate.origUrl = data.origUrl;
+      }
+
       urlToUpdate.updatedAt = new Date();
     }
   }
