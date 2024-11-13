@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "description": "",
-  "main": "index.js",
+  "main": "index.cjs",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "start": "node build/index.js",
+    "start": "node build/index.cjs",
     "build": "tsup src --out-dir build",
     "kysely": "kysely",
     "kysely:codegen": "kysely-codegen --out-file src/infra/db/types/db.d.ts --dialect postgres --camel-case",
