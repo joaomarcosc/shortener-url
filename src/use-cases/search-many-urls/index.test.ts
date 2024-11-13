@@ -30,7 +30,6 @@ describe("List urls by user use case", () => {
     await urlRepository.create({
       clicks: 0,
       origUrl: "google.com",
-      shortUrl: "google.com",
       userId: user?.id ?? "",
       urlId: randomUUID(),
     });
@@ -38,7 +37,6 @@ describe("List urls by user use case", () => {
     await urlRepository.create({
       clicks: 0,
       origUrl: "youtube.com.br",
-      shortUrl: "you.com.x",
       userId: user?.id ?? "",
       urlId: randomUUID(),
     });

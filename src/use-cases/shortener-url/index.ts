@@ -37,11 +37,8 @@ export class ShortenerUrlUseCase {
       return url;
     }
 
-    const shortUrl = `/${urlId}`;
-
     url = await this.urlRepository.create({
       origUrl,
-      shortUrl,
       urlId,
       clicks: 0,
       userId,
