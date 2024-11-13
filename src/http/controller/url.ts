@@ -43,7 +43,7 @@ export class UrlController {
       const url = await makeShortenerUrl.execute({ origUrl: body.origUrl, userId: user ?? null });
 
       reply.status(201).send({
-        url: `${req.host}/${url?.urlId}`,
+        url: `${req.protocol}://${req.host}/${url?.urlId}`,
       });
     } catch (error) {
       if (error instanceof ShortWrongUrlError) {
