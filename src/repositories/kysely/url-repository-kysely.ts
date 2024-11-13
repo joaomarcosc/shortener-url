@@ -21,7 +21,9 @@ export class UrlRepositoryKysely implements UrlRepository {
     return url;
   }
   async create(data: CreateUrlParams): Promise<Selectable<Url> | undefined> {
-    const url = await db.insertInto("url").values(data).returningAll().executeTakeFirst();
+    const url = await db.transaction().execute(async (trx) => {
+      return trx.insertInto("url").values(data).returningAll().executeTakeFirst();
+    });
 
     return url;
   }
