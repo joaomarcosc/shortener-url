@@ -53,6 +53,10 @@ export class UrlRepositoryKysely implements UrlRepository {
       });
     }
 
+    query.set({
+      updatedAt: new Date(),
+    });
+
     await query.execute();
   }
 
