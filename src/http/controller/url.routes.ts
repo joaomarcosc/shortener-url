@@ -1,4 +1,9 @@
-import { urlCreateJsonSchema, urlGetJsonSchema, urlSearchManyJsonSchema } from "@/documentation/swagger";
+import {
+  urlCreateJsonSchema,
+  urlGetJsonSchema,
+  urlSearchManyJsonSchema,
+  urlUpdateJsonSchema,
+} from "@/documentation/swagger";
 import type { FastifyInstance } from "fastify";
 import { UrlController } from "./url";
 
@@ -11,4 +16,5 @@ export async function urlRoutes(app: FastifyInstance) {
 
   // private routes
   app.get("/", { schema: urlSearchManyJsonSchema, onRequest: [app.authenticate] }, urlController.list);
+  app.patch("/", { schema: urlUpdateJsonSchema, onRequest: [app.authenticate] }, urlController.update);
 }

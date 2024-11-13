@@ -1,7 +1,13 @@
 import { db } from "@/infra/db/database";
 import type { Url } from "@/infra/db/types/db";
 import type { Selectable } from "kysely";
-import type { CreateUrlParams, FindOneUrlParams, SearchManyParams, UrlRepository } from "../url-repository";
+import type {
+  CreateUrlParams,
+  FindOneUrlParams,
+  SearchManyParams,
+  UpdateOneParams,
+  UrlRepository,
+} from "../url-repository";
 
 export class UrlRepositoryKysely implements UrlRepository {
   async findOne(data: FindOneUrlParams): Promise<Selectable<Url> | undefined> {
@@ -19,14 +25,26 @@ export class UrlRepositoryKysely implements UrlRepository {
     return url;
   }
 
-  async updateOne(urlId: string, incClick: number): Promise<void> {
-    await db
-      .updateTable("url")
-      .set({
-        clicks: incClick,
-      })
-      .where("url.urlId", "=", urlId)
-      .execute();
+  async updateOne(data: UpdateOneParams): Promise<void> {
+    let query = db.updateTable("url").where("url.urlId", "=", data.urlId);
+
+    if (data.userId) {
+      query = query.where("url.userId", "=", data.userId);
+    }
+
+    if (data.origUrl) {
+      query = query.set({
+        origUrl: data.origUrl,
+      });
+    }
+
+    if (data.incClick) {
+      query = query.set({
+        clicks: data.incClick,
+      });
+    }
+
+    await query.execute();
   }
 
   async searchMany(data: SearchManyParams): Promise<Array<Selectable<Url>> | undefined> {

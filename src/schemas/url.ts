@@ -23,6 +23,18 @@ export const searchManyUrlSchema = z.object({
   order: z.enum(["asc", "desc"]),
 });
 
+export const updateUrlBodySchema = z.object({
+  origUrl: z.string({
+    required_error: "origUrl is required",
+  }),
+});
+
+export const updateUrlQuerySchema = z.object({
+  urlId: z.string({
+    required_error: "urlId is required",
+  }),
+});
+
 // CREATE
 export type CreateUrlInput = z.infer<typeof urlCreateSchema>;
 
@@ -31,3 +43,7 @@ export type GetShortedUrlInput = z.infer<typeof getShortedUrlSchema>;
 
 // List
 export type SearchManyUrlsInput = z.infer<typeof searchManyUrlSchema>;
+
+// Update
+export type updateUrlBodyInput = z.infer<typeof updateUrlBodySchema>;
+export type updateUrlQueryInput = z.infer<typeof updateUrlQuerySchema>;

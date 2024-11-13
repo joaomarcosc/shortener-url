@@ -1,9 +1,17 @@
-import { type CreateUrlInput, type GetShortedUrlInput, searchManyUrlSchema } from "@/schemas/url";
+import {
+  type CreateUrlInput,
+  type GetShortedUrlInput,
+  searchManyUrlSchema,
+  updateUrlBodySchema,
+  updateUrlQuerySchema,
+} from "@/schemas/url";
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found";
 import { ShortWrongUrlError } from "@/use-cases/errors/short-wrong-url-error";
 import { makeGetShortedUrlFactory } from "@/use-cases/factories/make-get-shorted-url-factory";
 import { makeSearchManyUrlFactory } from "@/use-cases/factories/make-search-many-url-factory";
 import { makeShortenerUrlFactory } from "@/use-cases/factories/make-shortener-url-factory";
+import { makeUpdateUrlFactory } from "@/use-cases/factories/make-update-url-factory";
+import { HTTP_STATUS_CODE } from "@/utils/status-codes";
 import type { FastifyReply, FastifyRequest } from "fastify";
 
 export class UrlController {
@@ -83,6 +91,32 @@ export class UrlController {
       return reply.status(200).send({
         urls,
       });
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        return reply.status(error.statusCode).send({
+          message: error.message,
+        });
+      }
+
+      throw error;
+    }
+  }
+
+  async update(req: FastifyRequest, reply: FastifyReply) {
+    try {
+      const userId = req.user?.sub ?? "";
+      const query = updateUrlQuerySchema.parse(req.query);
+      const body = updateUrlBodySchema.parse(req.body);
+
+      const makeUpdateUrl = makeUpdateUrlFactory();
+
+      await makeUpdateUrl.execute({
+        origUrl: body.origUrl,
+        urlId: query.urlId,
+        userId,
+      });
+
+      return reply.status(HTTP_STATUS_CODE.NoContent).send();
     } catch (error) {
       if (error instanceof ResourceNotFoundError) {
         return reply.status(error.statusCode).send({

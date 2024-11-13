@@ -15,7 +15,10 @@ export class GetShortedUrlUseCase {
       throw new ResourceNotFoundError("url");
     }
 
-    await this.urlRepository.updateOne(url.urlId, url.clicks + 1);
+    await this.urlRepository.updateOne({
+      urlId,
+      incClick: url.clicks + 1,
+    });
 
     return url;
   }
