@@ -153,7 +153,7 @@ Before the next steps, a `.env` file is required. The `.env.example` file contai
 #### Refresh Token
 
 ```http
-  PATCH /refresh-token
+  PATCH /auth/refresh-token
 ```
 | Cookie     | Type     | Description                       |  
 | :--------    |:------- | :----------------------------------   |
