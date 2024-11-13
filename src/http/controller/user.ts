@@ -5,7 +5,7 @@ import { ResourceAlreadyExistsError } from "@/use-cases/errors/resource-already-
 import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found";
 import { makeAuthenticateUserFactory } from "@/use-cases/factories/make-authenticate-user-factory";
 import { makeCreateUserFactory } from "@/use-cases/factories/make-create-user-factory";
-import type { FastifyReply, FastifyRequest } from "fastify";
+import type { FastifyError, FastifyReply, FastifyRequest } from "fastify";
 
 export class UserController {
   async create(
@@ -55,15 +55,49 @@ export class UserController {
         },
       );
 
-      return reply.status(200).send({
-        token,
-      });
+      const refreshToken = await reply.jwtSign(
+        {},
+        {
+          sign: {
+            sub: user.id,
+            expiresIn: "7d",
+          },
+        },
+      );
+
+      return reply
+        .setCookie("refreshToken", refreshToken, {
+          path: "/",
+          secure: true,
+          sameSite: true,
+          httpOnly: true,
+        })
+        .status(200)
+        .send({
+          token,
+        });
     } catch (error) {
       if (error instanceof InvalidCredentialsError || error instanceof ResourceNotFoundError) {
         return reply.status(error.statusCode).send({ message: error.message });
       }
 
       throw error;
+    }
+  }
+
+  async logout(_: FastifyRequest, reply: FastifyReply) {
+    try {
+      reply
+        .clearCookie("refreshToken", {
+          path: "/",
+          secure: true,
+          sameSite: true,
+          httpOnly: true,
+        })
+        .status(204)
+        .send();
+    } catch (error) {
+      throw error as FastifyError;
     }
   }
 }
