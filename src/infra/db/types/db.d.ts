@@ -19,6 +19,7 @@ export interface Url {
   shortUrl: string;
   updatedAt: Generated<Timestamp>;
   urlId: string;
+  userId: string | null;
 }
 
 export interface User {

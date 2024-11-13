@@ -1,6 +1,6 @@
-import { env } from "@/env";
 import { CamelCasePlugin, Kysely, PostgresDialect } from "kysely";
 import { Pool } from "pg";
+import { env } from "../../env";
 import type { DB } from "./types/db";
 
 const pool = new Pool({
