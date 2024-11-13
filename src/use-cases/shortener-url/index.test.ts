@@ -24,7 +24,7 @@ describe("Url Shortener use case", () => {
       userId: "",
     });
 
-    expect(url?.shortUrl).toEqual(expect.any(String));
+    expect(url?.urlId).toEqual(expect.any(String));
   });
 
   it("should not be able to short a url when use incorrect origUrl", async () => {

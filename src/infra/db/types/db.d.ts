@@ -17,7 +17,6 @@ export interface Url {
   deletedAt: Timestamp | null;
   id: Generated<string>;
   origUrl: string;
-  shortUrl: string;
   updatedAt: Generated<Timestamp>;
   urlId: string;
   userId: string | null;
