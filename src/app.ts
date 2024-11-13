@@ -22,6 +22,14 @@ app.register(fastifySwagger, {
       description: "Documentation to use Shortener Url api in your project.",
       version: "0.1.0",
     },
+    securityDefinitions: {
+      bearerAuth: {
+        type: "apiKey",
+        in: "header",
+        name: "Authorization",
+        description: "Enter your bearer token in the format **Bearer &lt;token&gt;**",
+      },
+    },
   },
 });
 
