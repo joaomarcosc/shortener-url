@@ -10,8 +10,6 @@ The application allows users to shorten URLs in a simple and efficient way, offe
 3. **View a complete list of all shortened URLs** and their performance (clicks, creation date, etc.), with options to filter and sort the information.
 4. **Delete specific links** from their account if they are no longer needed or desired, with the option for permanent removal or temporary deactivation.
 
-Additionally, the platform offers an intuitive and user-friendly interface, compatible with both mobile and desktop devices, ensuring the best user experience in any context.
-
 **Key Features:**
 
 - URL Shortening: Quick creation of short links from valid URLs.
